@@ -1,0 +1,401 @@
+<html lang="ar" dir="rtl" style="font-size: 15px;">
+
+<head>
+    <script>if (!window.tailwind) window.tailwind = { config: { theme: { extend: {} } }, plugin: () => { } };</script>
+    <script>
+        const applyTheme = () => {
+            const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (isSystemDark) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.body.classList.remove('dark');
+            }
+        };
+        applyTheme();
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+
+        (function () {
+
+        })();
+    </script>
+    <meta name="robots" content="noindex">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>حساباتي - إدارة الديون والمبيعات</title>
+    <style id="pdf-progress-style">
+        .pdf-loading-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 115;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            direction: rtl;
+        }
+
+        .pdf-loading-modal {
+            background-color: #ffffff;
+            color: #1f2937;
+            width: 100%;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            border: 1px solid #f3f4f6;
+            transition: all 0.3s ease;
+        }
+
+        .dark .pdf-loading-modal {
+            background-color: #1f2937;
+            color: #e5e7eb;
+            border-color: #374151;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .pdf-loading-spinner {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 4px solid #d1fae5;
+            border-top-color: #10B981;
+            animation: loader-spin 0.9s linear infinite;
+            flex-shrink: 0;
+        }
+
+        .dark .pdf-loading-spinner {
+            border-color: rgba(16, 185, 129, 0.15);
+            border-top-color: #10B981;
+        }
+
+        .pdf-loading-text {
+            font-size: 15px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <script src="js/lib_1.js"></script>
+    <script src="js/lib_2.js"></script>
+    <script src="js/lib_3.js"></script>
+    <script src="js/lib_4.js"></script>
+    <script src="js/lib_5.js"></script>
+    <script src="js/lib_6.js"></script>
+    <script src="js/lib_7.js"></script>
+    <script src="js/lib_8.js"></script>
+    <script src="js/lib_9.js"></script>
+    <script src="js/storage-engine.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+
+<div id="consentBanner" style="
+    display:none;
+    background:#FEF3C7;
+    color:#92400E;
+    padding:12px;
+    text-align:center;
+    font-size:14px;
+    border-bottom:2px solid #F59E0B;
+">
+    ⚠️ يعمل التطبيق حاليًا بوضع محدود.
+    لتفعيل أسعار الذهب والعملات وجميع الميزات، يرجى الموافقة على سياسة الخصوصية.
+    <br><br>
+    <button onclick="requestConsent()" style="
+        background:#10B981;
+        color:white;
+        border:none;
+        padding:8px 16px;
+        border-radius:6px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+        الموافقة الآن
+    </button>
+</div>
+<style id="app-loader-theme">
+    /* 1. الوضع الافتراضي (الفتح) */
+    :root {
+        --loader-bg: #f3f4f6;
+        --loader-card-bg: #ffffff;
+        --loader-border: #e5e7eb;
+        --loader-skeleton: #cbd5e1;
+        --loader-hero-bg: #059669;
+        --loader-hero-sub: rgba(0, 0, 0, 0.12);
+        --loader-dashed-bg: rgba(255, 255, 255, 0.8);
+        --loader-active: #10b981;
+    }
+
+    /* 2. الوضع الداكن (ينشط تلقائياً فور إضافة كلاس dark لـ html) */
+    .dark {
+        --loader-bg: #0f172a;
+        --loader-card-bg: #1e293b;
+        --loader-border: #334155;
+        --loader-skeleton: #475569;
+        --loader-hero-bg: #059669;
+        --loader-hero-sub: rgba(0, 0, 0, 0.2);
+        --loader-dashed-bg: rgba(30, 41, 59, 0.5);
+        --loader-active: #34d399;
+    }
+
+    /* 3. حركة الوميض (Pulse Animation) */
+    @keyframes skeleton-pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.4;
+        }
+    }
+
+    .skeleton-pulse {
+        animation: skeleton-pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+</style>
+
+<div id="app-loader" dir="rtl" style="
+    width: 100%;
+    max-width: 60rem;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100vh;
+    height: 100dvh;
+    background-color: var(--loader-bg);
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
+">
+    <!-- الحاوية العلوية المجمعة -->
+    <div style="display: flex; flex-direction: column; gap: 14px; width: 100%;">
+
+        <!-- 1. الهيدر (يمين: الشعار والاسم | يسار: البروفايل) -->
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 4px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div
+                        style="width: 40px; height: 40px; border-radius: 14px; background-color: #10b981; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 20px; height: 20px; border-radius: 6px; background-color: rgba(255,255,255,0.4);"
+                         class="skeleton-pulse"></div>
+                </div>
+                <div style="width: 100px; height: 20px; background-color: var(--loader-border); border-radius: 6px;"
+                     class="skeleton-pulse"></div>
+            </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(16,185,129,0.5); background-color: var(--loader-card-bg);"
+                 class="skeleton-pulse"></div>
+        </div>
+
+        <!-- 2. بطاقة صافي الثروة الرئيسية -->
+        <div style="
+            width: 100%;
+            background-color: var(--loader-hero-bg);
+            border-radius: 28px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+        ">
+            <!-- صافي الثروة -->
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 6px;">
+                <div style="width: 80px; height: 12px; background-color: rgba(255,255,255,0.4); border-radius: 4px;"
+                     class="skeleton-pulse"></div>
+                <div style="width: 70px; height: 28px; background-color: rgba(255,255,255,0.85); border-radius: 8px;"
+                     class="skeleton-pulse"></div>
+            </div>
+
+            <!-- كروت لك / عليك -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div
+                        style="background-color: var(--loader-hero-sub); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+                    <div style="width: 48px; height: 12px; background-color: rgba(255,255,255,0.4); border-radius: 4px;"
+                         class="skeleton-pulse"></div>
+                    <div style="width: 32px; height: 22px; background-color: rgba(255,255,255,0.8); border-radius: 6px;"
+                         class="skeleton-pulse"></div>
+                </div>
+                <div
+                        style="background-color: var(--loader-hero-sub); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+                    <div style="width: 48px; height: 12px; background-color: rgba(255,255,255,0.4); border-radius: 4px;"
+                         class="skeleton-pulse"></div>
+                    <div style="width: 32px; height: 22px; background-color: rgba(255,255,255,0.8); border-radius: 6px;"
+                         class="skeleton-pulse"></div>
+                </div>
+            </div>
+
+            <!-- الجزء السفلي للبطاقة -->
+            <div
+                    style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 12px;">
+                <div style="width: 90px; height: 12px; background-color: rgba(255,255,255,0.4); border-radius: 4px;"
+                     class="skeleton-pulse"></div>
+                <div style="width: 90px; height: 12px; background-color: rgba(255,255,255,0.4); border-radius: 4px;"
+                     class="skeleton-pulse"></div>
+            </div>
+        </div>
+
+        <!-- 3. كروت العملات الثلاث (YER, SAR, USD) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+            <div
+                    style="background-color: var(--loader-card-bg); border-radius: 16px; padding: 14px; border: 1px solid var(--loader-border); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <div style="width: 36px; height: 12px; background-color: var(--loader-skeleton); border-radius: 4px;"
+                     class="skeleton-pulse"></div>
+                <div style="width: 44px; height: 20px; background-color: rgba(16,185,129,0.3); border-radius: 6px;"
+                     class="skeleton-pulse"></div>
+            </div>
+            <div
+                    style="background-color: var(--loader-card-bg); border-radius: 16px; padding: 14px; border: 1px solid var(--loader-border); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <div style="width: 36px; height: 12px; background-color: var(--loader-skeleton); border-radius: 4px;"
+                     class="skeleton-pulse"></div>
+                <div style="width: 44px; height: 20px; background-color: rgba(16,185,129,0.3); border-radius: 6px;"
+                     class="skeleton-pulse"></div>
+            </div>
+            <div
+                    style="background-color: var(--loader-card-bg); border-radius: 16px; padding: 14px; border: 1px solid var(--loader-border); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <div style="width: 36px; height: 12px; background-color: var(--loader-skeleton); border-radius: 4px;"
+                     class="skeleton-pulse"></div>
+                <div style="width: 44px; height: 20px; background-color: rgba(16,185,129,0.3); border-radius: 6px;"
+                     class="skeleton-pulse"></div>
+            </div>
+        </div>
+
+        <!-- 4. زر طباعة التقارير -->
+        <div style="
+            width: 100%;
+            height: 54px;
+            border-radius: 16px;
+            border: 2px dashed var(--loader-border);
+            background-color: var(--loader-dashed-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-sizing: border-box;
+        ">
+            <div style="width: 24px; height: 24px; border-radius: 6px; background-color: var(--loader-skeleton);"
+                 class="skeleton-pulse"></div>
+            <div style="width: 110px; height: 14px; background-color: var(--loader-skeleton); border-radius: 4px;"
+                 class="skeleton-pulse"></div>
+        </div>
+
+    </div>
+
+    <!-- 5. شريط التنقل السفلي -->
+    <div style="
+        width: 100%;
+        height: 64px;
+        background-color: var(--loader-card-bg);
+        border-radius: 18px;
+        border: 1px solid var(--loader-border);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        align-items: center;
+        margin-top: auto;
+        box-sizing: border-box;
+    ">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
+            <div style="width: 22px; height: 22px; border-radius: 6px; background-color: var(--loader-active);"
+                 class="skeleton-pulse"></div>
+            <div style="width: 36px; height: 6px; border-radius: 3px; background-color: var(--loader-active);"
+                 class="skeleton-pulse"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
+            <div style="width: 22px; height: 22px; border-radius: 6px; background-color: var(--loader-skeleton);"
+                 class="skeleton-pulse"></div>
+            <div style="width: 28px; height: 6px; border-radius: 3px; background-color: var(--loader-skeleton);"
+                 class="skeleton-pulse"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
+            <div style="width: 22px; height: 22px; border-radius: 6px; background-color: var(--loader-skeleton);"
+                 class="skeleton-pulse"></div>
+            <div style="width: 28px; height: 6px; border-radius: 3px; background-color: var(--loader-skeleton);"
+                 class="skeleton-pulse"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
+            <div style="width: 22px; height: 22px; border-radius: 6px; background-color: var(--loader-skeleton);"
+                 class="skeleton-pulse"></div>
+            <div style="width: 32px; height: 6px; border-radius: 3px; background-color: var(--loader-skeleton);"
+                 class="skeleton-pulse"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div id="root"></div>
+<script>
+    function canUseNetwork() {
+        try {
+            return typeof Android !== 'undefined'
+                && Android.isPrivacyAccepted
+                && Android.isPrivacyAccepted();
+        } catch (e) {
+            return false;
+        }
+    }
+    console.log("Android exists:", typeof Android !== 'undefined');
+    console.log("isPrivacyAccepted():", canUseNetwork());
+</script>
+<script src="js/lib_10.js"></script>
+<script src="js/inventory.js"></script>
+<script src="js/customer_invoice_service.js"></script>
+<script src="js/purchase_customer_service.js"></script>
+<script src="js/transaction_type_compat.js"></script>
+<script>
+    // Production Boot Sequence: Initialize AppStorage Engine BEFORE React reads data.
+    // We block React from reading by setting a global promise that the useEffect waits on.
+    window.__appStorageReady = false;
+    window.__appStorageInitPromise = null;
+    if (window.AppStorage) {
+        window.__appStorageInitPromise = window.AppStorage.init().then(function (result) {
+            window.__appStorageReady = true;
+            console.log("[Boot Sequence] AppStorage Engine initialized:", result);
+            return result;
+        }).catch(function (err) {
+            window.__appStorageReady = true; // allow React to proceed even on failure (will fallback to localStorage)
+            console.error("[Boot Sequence] AppStorage Engine init error (fallback active):", err);
+        });
+    } else {
+        window.__appStorageReady = true;
+        window.__appStorageInitPromise = Promise.resolve();
+}
+</script>
+
+
+<script type="text/babel"></script>
+<script src="js/app.js"></script>
+
+<script>
+    function showConsentBanner() {
+        document.getElementById('consentBanner').style.display = 'block';
+    }
+
+    function hideConsentBanner() {
+        document.getElementById('consentBanner').style.display = 'none';
+    }
+
+    function requestConsent() {
+        if (typeof Android !== 'undefined' && Android.openPrivacy) {
+            Android.openPrivacy();
+        }
+    }
+</script>
+
+</body>
+
+</html>

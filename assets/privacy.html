@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>سياسة الخصوصية وحماية البيانات</title>
+
+    <script>
+        (function() {
+            var isDark = window.location.hash.includes('dark');
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+
+    <style>
+        @font-face { font-family: 'Cairo'; src: url('fonts/Cairo-Regular.ttf') format('truetype'); font-weight: 400; }
+        @font-face { font-family: 'Cairo'; src: url('fonts/Cairo-Bold.ttf') format('truetype'); font-weight: 700; }
+        @font-face { font-family: 'Cairo'; src: url('fonts/Cairo-ExtraBold.ttf') format('truetype'); font-weight: 800; }
+
+        :root {
+            --bg-color: #F9FAFB;
+            --text-color: #1F2937;
+            --text-muted: #6B7280;
+            --card-bg: #FFFFFF;
+            --primary: #10B981;
+            --primary-bg: rgba(16, 185, 129, 0.1);
+            --danger: #EF4444;
+            --border: #E5E7EB;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        html.dark {
+            --bg-color: #111827;
+            --text-color: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --card-bg: #1F2937;
+            --primary-bg: rgba(16, 185, 129, 0.15);
+            --border: #374151;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+
+        header {
+            padding: 24px 20px 20px;
+            text-align: center;
+            background: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        html.dark header {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .help-btn {
+            position: absolute;
+            left: 20px;
+            top: 24px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            border: none;
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .help-btn:active {
+            transform: scale(0.95);
+        }
+
+        .help-btn svg { width: 22px; height: 22px; }
+
+        .logo-container {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 12px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .policy-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .icon-box svg { width: 20px; height: 20px; }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .policy-card p {
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .policy-card ul {
+            padding-right: 20px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .policy-card li { margin-bottom: 6px; }
+
+        .policy-card strong { color: var(--text-color); }
+
+        .highlight-box {
+            background: var(--primary-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            text-align: center;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        footer {
+            padding: 20px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        button.action-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 14px;
+            font-family: inherit;
+            font-weight: 800;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        button.action-btn:active { transform: scale(0.96); }
+
+        .btn-accept {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-decline {
+            background: var(--bg-color);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .content::-webkit-scrollbar { width: 4px; }
+        .content::-webkit-scrollbar-track { background: transparent; }
+        .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="help-btn" onclick="callSupport()" aria-label="مساعدة">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+    </button>
+    <div class="logo-container">
+        <svg viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
+            <rect width="108" height="108" fill="#10B981" rx="28" />
+            <g transform="translate(24, 24)">
+                <path fill="#FFFFFF" d="M45,2c-11.05,0 -20,8.95 -20,20v16h40v-16c0,-11.05 -8.95,-20 -20,-20z" />
+                <rect x="25" y="40" width="12" height="12" fill="#E6FFFA" rx="4" />
+                <rect x="41" y="44" width="12" height="12" fill="#E6FFFA" rx="4" />
+                <rect x="25" y="60" width="12" height="12" fill="#E6FFFA" rx="4" />
+                <rect x="41" y="60" width="12" height="12" fill="#E6FFFA" rx="4" />
+
+            </g>
+        </svg>
+    </div>
+    <h1 style="font-size: 18px; font-weight: 800; margin: 0; color: var(--text-color);">سياسة الخصوصية وأمان البيانات</h1>
+    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">الشفافية الكاملة - تحديث 2026</p>
+</header>
+
+<div class="content">
+    <div class="highlight-box">
+        <p>الخصوصية المطلقة كمنهج: بياناتك المالية لا تغادر جهازك أبداً.</p>
+    </div>
+
+    <div class="policy-card">
+        <div class="card-header">
+            <div class="icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            </div>
+            <h2>1. النزاهة وحفظ البيانات (التخزين المحلي)</h2>
+        </div>
+        <p>التطبيق مبني هندسياً على معمارية <strong>Offline-First</strong> لضمان الخصوصية التامة:</p>
+        <ul>
+            <li><strong>قواعد البيانات المالية:</strong> المبالغ، الديون، أسماء عملائك، وصافي أموالك تُحفظ وتُشفر حصرياً على القرص الصلب الخاص بجهازك المحمول.</li>
+            <li><strong>الوصول والاستقراء:</strong> لا نمتلك أي وصول، بصري أو برمجي، لسجلاتك المالية. هي ملك لك وحدك وتعمل حتى بدون إنترنت.</li>
+        </ul>
+    </div>
+
+    <div class="policy-card">
+        <div class="card-header">
+            <div class="icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" /></svg>
+            </div>
+            <h2>2. البيانات المزامنة الآمنة والمبررة</h2>
+        </div>
+        <p>نحن نحرص على عدم جمع أي شيء سوى ما هو ضروري لتشغيل الخدمة. يتزامن التطبيق مع خوادم <strong>Google Firebase Secure Cloud</strong> لأغراض محددة وشرعية تمس جوهر تجربة المستخدم:</p>
+        <ul>
+            <li><strong>الاسم ورقم الهاتف الاختياري:</strong> يُجمعان فقط لتمكيننا من التحقق من ترخيص حسابك وسرعة مساعدتك تقنياً عند اتصالك بالدعم الفني.</li>
+            <li><strong>موديل الجهاز ونظام التشغيل:</strong> يُجمع تلقائياً لمساعدتنا على كشف المشاكل التقنية على أجهزة معينة (بسبب تنوع أجهزة أندرويد) ولضمان معالجة الأخطاء (Bugs) بشكل دقيق.</li>
+            <li><strong>مجموع الأرصدة وعداد العمليات:</strong> نجمع متغيرات رقمية إجمالية (مثلاً: إجمالي أرصدة الحساب وعدد الحركات الكلي) دون أي أسماء أو تواريخ. الغرض الوحيد هو مراقبة استقرار أداء قواعد البيانات لدينا في النسخ المستقبلية ولتنبيهك في حال تجاوزت الحدود المنطقية لقوة تحمل الجهاز.</li>
+            <li><strong>نسخ Google Drive:</strong> تتم المزامنة من جهازك مباشرة إلى حسابك في قوقل درايف وتظل مشفرة في مساحتك الخاصة بتصريح منك.</li>
+        </ul>
+    </div>
+
+    <div class="policy-card">
+        <div class="card-header">
+            <div class="icon-box" style="background-color: rgba(59, 130, 246, 0.1); color: #3B82F6;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            </div>
+            <h2>3. شفافية الصلاحيات ونظافة التطبيق</h2>
+        </div>
+        <p>يحترم التطبيق سياسات <strong>Google Play</strong> لأمن التطبيقات التام ولا يتطفل أبدًا على خصوصيتك:</p>
+        <ul>
+            <li><strong>لا يوجد صلاحيات تخزين مفرطة:</strong> التطبيق لا يحتاج لصلاحيات قراءة أو استعراض صور جهازك <code>READ_EXTERNAL_STORAGE</code>. نستخدم نظام الأندرويد الأصلي والآمن (Secure Load) لاختيار النسخ الاحتياطية وتعيين الشعار.</li>
+            <li><strong>لا يوجد صلاحية لجهات الاتصال:</strong> يتم كتابة أسماء عملائك يدوياً داخل التطبيق دون التدخل في سجل أرقامك، احتراماً لخصوصية الآخرين الموقرة.</li>
+            <li><strong>صلاحية الإنترنت فقط:</strong> تُستخدم للتحقق من التراخيص، وإرسال البيانات الإحصائية الدقيقة المذكورة أعلاه.</li>
+        </ul>
+    </div>
+
+    <div class="policy-card" style="border-color: rgba(239, 68, 68, 0.2);">
+        <div class="card-header">
+            <div class="icon-box" style="background-color: rgba(239, 68, 68, 0.1); color: #EF4444;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </div>
+            <h2 style="color: #EF4444;">4. حقوقك الأساسية في التحكم وحذف البيانات</h2>
+        </div>
+        <p>بصفتك المالك الوحيد لبياناتك، فإن سياساتنا توفر لك تحكماً مطلقاً بما نملكه عنك من معلومات عامة:</p>
+        <ul>
+            <li>يمكنك في أي وقت الذهاب إلى قسم <strong>الإعدادات > الأمان</strong> واختيار خيار <strong style="color: #EF4444;">التحكم ببياناتك على الخوادم</strong>.</li>
+            <li>نقرة واحدة كفيلة بمسح رقمك، جهازك، وإحصاءاتك بالكامل وتحويلها لأسطر فارغة في قواعد بياناتنا، دون الحاجة للاتصال بنا أو إرسال بريد إلكتروني.</li>
+            <li>لن تتأثر بياناتك المحلية المالية وتطبيقك جراء هذا الحذف وتستمر بالعمل بنجاح.</li>
+        </ul>
+    </div>
+
+    <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-bottom: 30px;">
+        تم التطوير بواسطة: م. محمد عبد الرحمن القضاضي<br>
+        معتمد ومتوافق مع سياسات الأمان والتشفير © 2026<br>
+        الدعم التقني واتساب: +967777700086
+    </p>
+</div>
+
+<footer>
+    <button class="action-btn btn-decline" onclick="decline()">لا أوافق </button>
+    <button class="action-btn btn-accept" onclick="accept()">أوافق </button>
+</footer>
+
+<script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    function accept() {
+        if (typeof Android !== 'undefined' && Android.acceptPrivacy) {
+            Android.acceptPrivacy();
+        } else {
+            console.log("Mock Accept Privacy");
+        }
+    }
+
+    function decline() {
+        if (typeof Android !== 'undefined' && Android.declinePrivacy) {
+            Android.declinePrivacy();
+        } else {
+            console.log("Mock Decline Privacy");
+        }
+    }
+
+    function callSupport() {
+        if (typeof Android !== 'undefined' && Android.callSupport) {
+            Android.callSupport();
+        } else {
+            window.location.href = 'tel:777700086';
+        }
+    }
+</script>
+</body>
+</html>
